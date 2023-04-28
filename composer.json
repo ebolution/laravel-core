@@ -2,7 +2,7 @@
     "name": "ebolution/laravel-core",
     "description": "Base features and tools to use in the application",
     "minimum-stability": "stable",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "authors": [
         {
