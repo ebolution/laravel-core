@@ -84,9 +84,9 @@ final class ListingHelper
     {
         $this->setBetweenDatesParameters($parameters);
 
-        if ( !empty($fromDate) or !empty($toDate) ) {
-            $from = $this->fromDate ? new Carbon($fromDate) : Carbon::minValue();
-            $to = $this->toDate ? new Carbon($toDate) : Carbon::maxValue();
+        if ( !empty($this->fromDate) or !empty($this->toDate) ) {
+            $from = $this->fromDate ? new Carbon($this->fromDate) : Carbon::minValue();
+            $to = $this->toDate ? new Carbon($this->toDate) : Carbon::maxValue();
 
             $this->query = $this->query->whereBetween($column, [$from, $to]);
         }
@@ -215,7 +215,7 @@ final class ListingHelper
         $offset = $this->offset ?? 0;
 
         return [
-            'path' => "?page={$page}&limit={$limit}",
+            'path' => $this->request->path(),
             'current_page' => $page,
             'from' => $offset <= $this->totalItems ? $offset : null,
             'to' => $offset <= $this->totalItems ? $offset + sizeof($this->data) : null,
