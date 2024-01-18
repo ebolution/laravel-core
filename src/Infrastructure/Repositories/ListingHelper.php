@@ -212,7 +212,7 @@ final class ListingHelper
     {
         $page = $this->page ?? 1;
         $limit = $this->limit ?? self::DEFAULT_PAGE_SIZE;
-        $offset = $this->offset ?? 0;
+        $offset = ($this->offset ?? 0) + 1;
 
         return [
             'path' => $this->request->path(),

@@ -4,16 +4,18 @@ namespace Ebolution\Core\Infrastructure\Repositories;
 
 trait OutputMappings
 {
-    protected array $mappers = [];
-
     protected function setMappers(string $configKey): void
     {
-        $this->mappers = config($configKey, []);
+        global $__mappers__;
+
+        $__mappers__ = config($configKey, []);
     }
 
     protected function mapElement(string $type, array $element): array
     {
-        $mapper_class = $this->mappers[$type] ?? null;
+        global $__mappers__;
+
+        $mapper_class = $__mappers__[$type] ?? null;
         if ( $mapper_class ) {
             $mapper = app()->make($mapper_class);
             $result = $mapper($element);
@@ -26,7 +28,9 @@ trait OutputMappings
 
     protected function mapList(string $type, array $elements): array
     {
-        $mapper_class = $this->mappers[$type] ?? null;
+        global $__mappers__;
+
+        $mapper_class = $__mappers__[$type] ?? null;
         if ( $mapper_class ) {
             $mapper = app()->make($mapper_class);
             $result = [];
