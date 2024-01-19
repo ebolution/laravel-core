@@ -212,13 +212,13 @@ final class ListingHelper
     {
         $page = $this->page ?? 1;
         $limit = $this->limit ?? self::DEFAULT_PAGE_SIZE;
-        $offset = ($this->offset ?? 0) + 1;
+        $offset = $this->offset ?? 0;
 
         return [
             'path' => $this->request->path(),
             'current_page' => $page,
-            'from' => $offset <= $this->totalItems ? $offset : null,
-            'to' => $offset <= $this->totalItems ? $offset + sizeof($this->data) : null,
+            'from' => $offset < $this->totalItems ? $offset + 1 : null,
+            'to' => $offset < $this->totalItems ? $offset + sizeof($this->data) : null,
             'last_page' => $this->lastPage,
             'per_page' => $limit,
             'total' => $this->totalItems,
