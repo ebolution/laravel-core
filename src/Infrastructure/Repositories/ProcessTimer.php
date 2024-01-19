@@ -5,6 +5,8 @@ namespace Ebolution\Core\Infrastructure\Repositories;
 use Ebolution\Core\Domain\Contracts\ProcessTimerInterface;
 use Ebolution\Logger\Domain\LoggerFactoryInterface;
 use Ebolution\Logger\Infrastructure\Logger;
+use Ebolution\LoggerDb\Infrastructure\Models\LogSync;
+use ReflectionObject;
 
 class ProcessTimer implements ProcessTimerInterface
 {
@@ -45,5 +47,28 @@ class ProcessTimer implements ProcessTimerInterface
                 self::BASE_LOG_MESSAGE
             )
         );
+
+        /*** begin log DB ***/
+        // Remove this block when LOGSTASH is ready
+        try {
+            // getPrefix is a private method
+            $loggerReflection = new ReflectionObject($this->logger);
+            $builderProperty = $loggerReflection->getProperty('builder');
+            $builderProperty->setAccessible(true);
+            $builder = $builderProperty->getValue($this->logger);
+            $prefix = $builder->getPrefix();
+
+            LogSync::create([
+                'type' => strtolower($prefix),
+                'process' => $this->processName,
+                'identifier' => $this->identifier,
+                'execution_time' => $executionTime
+            ]);
+        } catch (\Throwable $th) {
+            $this->logger->__invoke(
+                'LogSync: Error saving process log in database'
+            );
+        }
+        /*** end log DB ***/
     }
 }
