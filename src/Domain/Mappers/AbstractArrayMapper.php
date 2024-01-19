@@ -146,8 +146,14 @@ abstract class AbstractArrayMapper
             }
         } else {
             $new_name = $rules;
-            $data[$new_name] = $data[$element];
-            unset($data[$element]);
+            if ($new_name === 'id') { // 'id' is expected to be the first element on the array
+                $id = $data[$element];
+                unset($data[$element]);
+                $data = ['id' => $id] + $data;
+            } else {
+                $data[$new_name] = $data[$element];
+                unset($data[$element]);
+            }
         }
     }
 
