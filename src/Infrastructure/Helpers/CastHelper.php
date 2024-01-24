@@ -27,12 +27,13 @@ trait CastHelper
         return $result;
     }
 
-    private function cast_element(string $type, string $value): int|string|null|Carbon
+    private function cast_element(string $type, string $value): int|string|null|Carbon|float
     {
         return match ($type) {
             'int' => intval($value),
             'hashed' => Hash::make($value),
             'datetime' => Carbon::make($value),
+            'float'     => floatval($value),
             default => $value,
         };
     }
